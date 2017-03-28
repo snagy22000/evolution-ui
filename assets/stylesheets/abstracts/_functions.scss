@@ -32,19 +32,23 @@
 
 
 ///
-///  Reference the parent element
-///  Add the parent-selector character '&'' if the caller @include directive
-///  is currently located inside an actual class
+/// Reference a parent element
+/// Add the parent-selector character '&' if the caller @include directive
+/// is located within a css class
 ///
 /// @access public
-/// @param {String} $selector - A desired selector
+/// @param {String}  $selector - A desired selector
+/// @param {Boolean} $is-descendant [false] - If TRUE, sets the selector as descendant of the parent class
+///
+/// @link http://www.sassmeister.com/gist/08edd5072f77749bebca0081201de9a8 - Usage Examples
+///
 /// @return {String}
 ///
 ///
 /// @example scss - Usage
 ///
-///  $base-selector: getSelector('.mySelector');
-///  #{ $base-selector } {}
+///  $base-selector: addParentSelector('.mySelector');
+///  #{$base-selector} {}
 ///
 /// @example css - CSS output
 ///
@@ -54,9 +58,9 @@
 /// @example scss - Usage
 ///
 ///  .parentClass {
-///     $base-selector: getSelector('.mySelector');
+///     $base-selector: addParentSelector('.mySelector');
 ///
-///     #{ $base-selector } {
+///     #{$base-selector} {
 ///       color: white;
 ///     }
 ///
@@ -65,12 +69,32 @@
 ///  .parentClass.mySelector {
 ///     color: white;
 ///  }
+///
+/// @example scss - Usage
+///
+///  .parentClass {
+///     $base-selector: addParentSelector('.mySelector', $is-descendant: true);
+///
+///     #{$base-selector} {
+///       color: white;
+///     }
+///
+/// @example css - CSS output
+///
+///  .parentClass .mySelector {
+///     color: white;
+///  }
+///
 
-@function referenceParent($selector) {
-  // When we are not at the @root level, prepend the parent class character '&'
-  @if ( & != null ) {
-   @return '&#{$selector}';
-  } @else {
+@function addParentSelector($selector, $is-descendant: false) {
+
+  // When we are not in the first level use the parent class
+  // and the strict mode variable has been set to true
+  $prepend: if($is-descendant == true, '& ', '&');
+
+  @if (& != null) {
+   @return '#{$prepend}#{$selector}';
+  }@else {
     @return '#{$selector}';
   }
 }
@@ -80,7 +104,7 @@
 //                            COLORS HELPERS
 // -----------------------------------------------------------------------------
 
-
+///
 /// Slightly lighten a color (Add percentage of white to a color)
 /// @access public
 /// @param {Color} $color - color to tint
@@ -90,6 +114,7 @@
   @return mix(white, $color, $percentage);
 }
 
+///
 /// Slightly darken a color (Add percentage of black to a color)
 /// @access public
 /// @param {Color} $color - color to shade
@@ -111,6 +136,18 @@
 /// @require $framework-colors
 /// @require $framework-colors-opacity
 /// @return {HEX Value}
+///
+/// @example - get-color function - opacity's name are specified in the $framework-colors-opacity variable
+///   get-color('accent')
+///   // Returns the hex color of the BASE variant of the 'accent' color
+///   get-color('accent', 'light')
+///   // Returns the hex color of the LIGHT variant of the hexadecimal color of the 'accent' color
+///   get-color('accent4', 'dark', .5)
+///   // Returns the hex color of the DARK variant of the 'accent4' color with an opacity of .5
+///   get-color('primary', $opacity:.8)
+///   // Returns the hex color of the BASE variant of the 'primary' color with an opacity of .8
+///   get-color('secondary', $opacity:'heavy')
+///   // Returns the hex color of the BASE variant of the 'secondary' color with an opacity of .4
 ///
 
 @function get-color( $type: 'primary', $variant: 'base', $opacity: 1 ) {

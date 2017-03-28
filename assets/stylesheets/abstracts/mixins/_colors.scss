@@ -1,9 +1,11 @@
 
-///
-/// Usage example http://www.sassmeister.com/gist/08edd5072f77749bebca0081201de9a8
+
 ///
 /// Generate helper classes for each color and variants within the
 /// $framework-colors map
+///
+/// @link http://codepen.io/DrLeleMeo/full/oZdMQa/ - Evolution UI colors palette
+/// @link http://www.sassmeister.com/gist/08edd5072f77749bebca0081201de9a8
 ///
 /// @author Gabriele Romeo
 ///
@@ -11,6 +13,7 @@
 ///
 /// @param {String} $helperName - The name of the helper class
 /// @param {String} $CSSproperty ['color'] - The CSS property you want to set
+/// @param {Boolean} $is-descendant [FALSE] - If TRUE sets the helpers as descendant of the parent class
 ///
 /// @require $framework-colors
 ///
@@ -43,13 +46,13 @@
 ///
 
 
-@mixin colorHelpers( $helperName, $CSSproperty: 'color' ) {
+@mixin colorHelpers($type, $CSSproperty: 'color', $is-descendant: false) {
 
   @each $color-key, $color-variants in $framework-colors {
 
     $base-color-value: map-get($color-variants, 'base');
 
-    $base-selector: referenceParent('.h-#{$helperName}__#{$color-key}');
+    $base-selector: addParentSelector('.h-#{$type}__#{$color-key}', $is-descendant);
 
     #{$base-selector} {
       #{$CSSproperty}: $base-color-value;
@@ -58,7 +61,8 @@
     @each $color-variant, $color-variant-value in $color-variants {
       @if $color-variant != 'base' {
 
-        $variant-selector: referenceParent('.h-#{$helperName}__#{$color-key}--#{$color-variant}');
+        $tmp-selector: '.h-#{$type}__#{$color-key}--#{$color-variant}';
+        $variant-selector: addParentSelector($tmp-selector, $is-descendant);
 
         #{$variant-selector} {
           #{$CSSproperty}: $color-variant-value;
@@ -72,6 +76,9 @@
 /// Generate helper classes for the base colors and their variants contained
 ///  within the provided map
 ///
+/// @link http://codepen.io/DrLeleMeo/full/oZdMQa/ - Evolution UI colors palette
+/// @link http://www.sassmeister.com/gist/08edd5072f77749bebca0081201de9a8
+///
 /// @author Gabriele Romeo
 ///
 /// @access public
@@ -79,6 +86,7 @@
 /// @param {String} $helperName - The name of the helper class
 /// @param {String} $colorMap   - A map containing base colors and their variants
 /// @param {String} $CSSproperty ['color'] - The CSS property you want to set
+/// @param {Boolean} $is-descendant [FALSE] - If TRUE sets the helpers as descendant of the parent class
 ///
 /// @require $framework-colors
 ///
@@ -106,6 +114,31 @@
 ///    color: #######
 ///  }
 ///
+///
+/// @example scss - Usage
+///
+///  $component-txt-variants: (
+///    'accent3': ('base', 'light', 'darken')
+///  );
+///
+///  .namespace_myClass {
+///     @include colorHelper('txt', $component-txt-variants, $is-descendant: true);
+///   }
+///
+/// @example css - CSS output
+///
+///  .namespace_myClass .h-txt__accent3 {
+///    color: #######
+///  }
+///
+///  .namespace_myClass .h-txt__accent3--light {
+///    color: #######
+///  }
+///
+///  .namespace_myClass .h-txt__accent3--darken {
+///    color: #######
+///  }
+///
 ///  $component-bck-variants: (
 ///    'accent3': ('base', 'light', 'darken')
 ///  );
@@ -128,7 +161,7 @@
 ///    background-color: #######
 ///  }
 
-@mixin colorHelper( $helperName, $colorMap, $CSSproperty: 'color' ) {
+@mixin colorHelper($type, $colorMap, $CSSproperty: 'color', $is-descendant: false) {
 
   @each $color-key, $color-variants in $colorMap {
 
@@ -139,16 +172,15 @@
       @each $variant in $color-variants {
         @if map-has-key($base-color-variants, $variant) {
 
-          $selector: referenceParent('.h-#{$helperName}__#{$color-key}--#{$variant}');
+          $tmp-selector: '.h-#{$type}__#{$color-key}--#{$variant}';
+          $selector: addParentSelector($tmp-selector, $is-descendant);
 
           #{$selector} {
             #{$CSSproperty}: map-get($base-color-variants, $variant);
           }
         }
       }
-
     }
-
   }
 }
 
@@ -156,6 +188,9 @@
 /// Generate helper classes for the base colors and their variants contained
 /// within the provided map. By default, the helper's name is 'bck' and the
 /// CSS property used is 'background-color'
+///
+/// @link http://codepen.io/DrLeleMeo/full/oZdMQa/ - Evolution UI colors palette
+/// @link http://www.sassmeister.com/gist/08edd5072f77749bebca0081201de9a8
 ///
 /// @author Gabriele Romeo
 ///
@@ -165,7 +200,7 @@
 /// @param {String} $colorMap   - An optional map containing base colors
 ///                               and their variants. If Null it generates all
 ///                               colors and variants contained inside $framework-colors
-/// @param {String} $CSSproperty ['color'] - The CSS property you want to set
+/// @param {Boolean} $is-descendant [FALSE] - If TRUE sets the helpers as descendant of the parent class
 ///
 ///
 /// @example scss - Usage
@@ -199,13 +234,44 @@
 ///    background-color: #######
 ///  }
 ///
+///
+/// @example scss - Usage
+///
+///  $component-bck-variants: (
+///    'accent3': ('base', 'light', 'darken')
+///  );
+///
+///  .myComponent {
+///    @include backgroundVariants($component-bck-variants, $is-descendant: true);
+///    width: 500px;
+///    margin: 10px;
+///  }
+///
+/// @example css - CSS output
+///
+///  .myComponent {
+///    width: 500px;
+///    margin: 10px;
+///  }
+///
+///  .myComponent .h-bck__accent3 {
+///    background-color: #######
+///  }
+///
+///  .myComponent .h-bck__accent3--light {
+///    background-color: #######
+///  }
+///
+///  .myComponent .h-bck__accent3--darken {
+///    background-color: #######
+///  }
+///
 
-
-@mixin backgroundVariants( $colorMap: null ) {
+@mixin backgroundVariants($colorMap: null, $is-descendant: false) {
   @if ( $colorMap == null ) {
-    @include colorHelpers('bck', $CSSproperty: 'background-color');
+    @include colorHelpers('bck', $CSSproperty: 'background-color', $is-descendant: $is-descendant);
   } @else {
-      @include colorHelper('bck', $colorMap, $CSSproperty: 'background-color');
+      @include colorHelper('bck', $colorMap, $CSSproperty: 'background-color', $is-descendant: $is-descendant);
   }
 }
 
@@ -213,6 +279,9 @@
 /// Generate helper classes for the base colors and their variants contained
 /// within the provided map. By default, the helper's name is 'txt' and the
 /// CSS property used is 'color'
+///
+/// @link http://codepen.io/DrLeleMeo/full/oZdMQa/ - Evolution UI colors palette
+/// @link http://www.sassmeister.com/gist/08edd5072f77749bebca0081201de9a8
 ///
 /// @author Gabriele Romeo
 ///
@@ -222,7 +291,7 @@
 /// @param {String} $colorMap   - An optional map containing base colors
 ///                               and their variants. If Null it generates all
 ///                               colors and variants contained inside $framework-colors
-/// @param {String} $CSSproperty ['background-color'] - The CSS property you want to set
+/// @param {Boolean} $is-descendant [FALSE] - If TRUE sets the helpers as descendant of the parent class
 ///
 ///
 /// @example scss - Usage
@@ -257,10 +326,10 @@
 ///  }
 ///
 
-@mixin textVariants( $colorMap: null ) {
+@mixin textVariants($colorMap: null, $is-descendant: false) {
   @if ( $colorMap == null ) {
-    @include colorHelpers('txt');
+    @include colorHelpers('txt', $is-descendant: $is-descendant);
   } @else {
-      @include colorHelper('txt', $colorMap);
+      @include colorHelper('txt', $colorMap, $is-descendant: $is-descendant);
   }
 }

@@ -1,8 +1,34 @@
 This guidelines are in part based on the code guide you can find at this URL:  http://codeguide.co/
 
+#### Table of contents
+
+* [Editor preferences](#editor-preferences)
+   * [HTML Code guide](#html-code-guide)
+       * [HTML Syntax](#html-syntax)
+       * [Attribute order](#attribute-order)
+       * [HTML tabindex Attribute](#htmltabindexattribute)
+   * [CSS Code Guide](#css-code-guide)
+       * [Declaration order](#declaration-order)
+       * [Media queries](#media-queries)
+       * [Single declarations](#single-declarations)
+       * [Shorthand notation](#shorthand-notation)
+   * [BEM: BLock, Element, Modifier](#bem-block-element-modifier)
+       * [Namespaces](#namespaces)
+       * [JS hooks](#js-hooks)
+       * [State Hooks](#state-hooks)
+       * [BEM and BEMit in the evolution framework](#bem-and-bemit-in-the-evolution-framework)
+         * [Usage examples and SASS documentation](#usage-examples-and-sass-documentation)
+   * [IMPORTANT NOTES](#important-notes)
+      * [Sass structure](#sass-structure)
+   * [Javascript guideline](#javascript-guideline)
+
+
+
 
 
 ### Editor preferences
+
+
 
 EditorConfig helps developers define and maintain consistent coding styles between different editors and IDEs
 
@@ -12,6 +38,7 @@ Please check on the [site project](http://editorconfig.org/#download) how to con
 
 Then use the [.editorconfig](https://github.com/BovAcademy-opensource/evolution-ui/.editorconfig) file contained in the root of the framework repository
 
+
     root = true
 
     [*]
@@ -20,11 +47,11 @@ Then use the [.editorconfig](https://github.com/BovAcademy-opensource/evolution-
     charset = utf-8
     trim_trailing_whitespace = true
     insert_final_newline = true
-    
+
     # Use 2 spaces for indentation in HTML, JavaScript, SCSS, CSS
     [*.{html,js,scss, css}]
     indent_size = 2
-    
+
     [*.js]
     indent_brace_style = 1TBS
     continuation_indent_size = 2
@@ -34,9 +61,9 @@ Then use the [.editorconfig](https://github.com/BovAcademy-opensource/evolution-
     spaces_around_operators = true
     spaces_in_brackets = false
     quote_type = single
-    
+
     # Use 4 spaces for indentation in Markdown files
-    
+
     [*.md]
     indent_size = 4
 
@@ -117,25 +144,25 @@ for example:
   position: relative;
   top: 0;
   left: 0;
-  
+
   /* Box-model */
   display: block;
   min-height: 0;
   height: 0;
   padding-left: 10px;
   padding-right: 10px;
-  
+
   /* Typography */
   font-size: 2rem;
   color: #ababab;
-  
-  /* Visual Aspect */  
+
+  /* Visual Aspect */
   background-color: rgb(0,0,0);
   border-width: 1px;
   border-color: #000;
   border-style: groove;
   perspective: 40px;
-  
+
   /* Misc */
   transition: min-height 1s cubic-bezier(0,1.02,0,1);
   cursor: initial;
@@ -164,7 +191,7 @@ When a rule set requires *only one declaration*, remove line breaks for readabil
   /* positioning */
   position: relative;
   top: 0;
-  left: 0;  
+  left: 0;
   /* Box-model */
   display: block;
   min-height: 0;
@@ -197,9 +224,9 @@ When a rule set requires *only one declaration*, remove line breaks for readabil
 
 
 
-## BEM: BLock, Element, MOdifier
+## BEM: BLock, Element, Modifier
 
-BEM and its variation BEMit are two methodologies that give us the capacity to improve maintainability as well as readability of our code. 
+BEM and its variation BEMit are two methodologies that give us the capacity to improve maintainability as well as readability of our code.
 
 To get more confidence with them, take a look at the [getbem](http://getbem.com/) website.
 
@@ -211,7 +238,7 @@ The following table shows common elements and their meanings
 | ---------------- | ------------ | ---------------------------- | ------------------------- |
 | Component        | `c-`         | `c`                          | `c-card` `c-checklist`    |
 | Layout module    | `l-`         | `l`                          | `l-grid` `l-container`    |
-| Helper           | `h-`         | `c`                          | `h-show` `h-hide`         |
+| Helper           | `h-`         | `h`                          | `h-show` `h-hide`         |
 | Object           | `o-`         | `o`                          | `o-media`                 |
 | States           | `is-` `has-` | `s`                          | `is-visible` `has-loaded` |
 | JavaScript hooks | `js-`        |                              | `js-tab-switcher`         |
@@ -224,6 +251,8 @@ A namespace could be use for:
 - Settings
 - Mixins
 - Functions
+
+More info on how to use namespaces and their intrinsic meanings can be found [here](https://csswizardry.com/2015/03/more-transparent-ui-code-with-namespaces/)
 
 Examples:
 
@@ -264,6 +293,8 @@ Others:
 
 ### JS hooks
 
+As a rule of thumb, combining the visual aspect (CSS) and the behavior (JS) onto the same class in your HTML is not wise. This is because doing so you run the risk of breaking your application since  you can’t have (or remove) one without (removing) the other. It is smarter, cleaner, and more maintainable to bind your JS onto specific classes like in the following examples:
+
 ###### ✖️ NOT worthwhile
 
 - `js-trigger`
@@ -280,9 +311,9 @@ Others:
 
 Certain styles are *state* based, for example
 
-- a link may be in an active state;
-- a button may be clicked
-- a drop down menu may be in a visible state
+- A link may be in an active state;
+- A button may be clicked
+- A drop down menu may be in a visible state
 
 
 
@@ -311,8 +342,8 @@ The previous example becomes:
 <div class="evo_c-searchBox">
 
   <!-- the searchBox component contains an input element -->
-  <!-- 
-	  the input element comes with two modifiers - big and red 
+  <!--
+	  the input element comes with two modifiers - big and red
   -->
   <input class="evo_c-searchBox__input evo_c-searchBox__input--big" type="text">
   <input class="evo_c-searchBox__input evo_c-searchBox__input--red" type="text">
@@ -360,6 +391,19 @@ When you need to create a classe for a component without the use of a provided m
 
 
 
+Config variables in your configuration file must be always prefixed by the [ BEMit namespace + the component's name ]. If your component is called for example `Ruler`, a well structured config file could be:
+
+```
+//----------------------------------------------------------------
+//                       RULER Component config
+//----------------------------------------------------------------
+
+$c-ruler_width: 200px;
+$c-ruler_font-size: 200px;
+```
+
+
+
 ## Sass structure
 
 For structuring SASS files we've adopted a customized version of the [7-1 pattern](https://sass-guidelin.es/#architecture)
@@ -390,19 +434,16 @@ stylesheets/
 |      |- accordion     # Accordion's assets
 |      |    | -  _accordion-config.scss
 |      |    | -  _accordion.scss
-|      |    | -  _accordion.js
 |      |    | -  ...
 |      |
 |      |- animations     # Animations' assets
 |      |    | -  _animations-config.scss
 |      |    | -  _animations.scss
-|      |    | -  animations.js
 |      |    | -  ...
 |      |
 |      |- audio         # Audio's assets
 |      |    | -  _audio-config.scss
 |      |    | -  _audio.scss
-|      |    | -  audio.js
 |      |    | -  ...
 |      |
 |      | ... etc
@@ -441,11 +482,11 @@ Where:
 
 - The `abstracts` folder holds all Sass tools and helpers used across the project (*mixins*, *functions*, **application-wide (a.k.a globals)** *variables*, and *placeholders*). In particular, *mixin* are placed into the `mixins` sub-folder and imported through the `_import-mixins.scss` file.
 
-- The `base` folder holds the boilerplate code for the project (reset, typography, etc.). 
+- The `base` folder holds the boilerplate code for the project (reset, typography, etc.).
 
 - The `layout` folder contains everything that takes part in laying out the site (header, grid, footer, aside, etc.).
 
-- As its name suggests, the `components`  folder contains all the components. Components are distributed into two main categories,  `evolution`  or  `standard`, and each one has its own directory. Inside the component directory are your main sass files. For example, the Dot Navigation component has these two files: main file `_Eyelids.scss` and configuration file `_Eyelids-config.scss`. You can import configuration file into the main file to keep the configuration separate. 
+- As its name suggests, the `components`  folder contains all the components. Components are distributed into two main categories,  `evolution`  or  `standard`, and each one has its own directory. Inside the component directory are your main sass files. For example, the Dot Navigation component has these two files: main file `_Eyelids.scss` and configuration file `_Eyelids-config.scss`. You can import configuration file into the main file to keep the configuration separate.
 
   **IMPORTANT NOTE:** Config variables must be always prefixed by the actual component's name. If your component is called for example `Ruler`, a well structured config file could be:
 
@@ -472,4 +513,11 @@ Where:
 - The `themes` folder contains different themes for the application.
 
 - The `vendor`folder contains all the CSS files from external libraries and frameworks – for example: Reset, Normalize, etc.
+
+
+
+
+# Javascript guideline
+
+For Javascript, we adhere almost totally to the rules proposed by the [Modern Developer's guideline](https://github.com/GabrieleRomeo/Modern-Developer-JavaScript-Style-Guide) with the exception of *allowing spaces in brackets*.
 
