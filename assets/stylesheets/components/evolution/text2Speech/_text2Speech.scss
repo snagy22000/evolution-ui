@@ -17,7 +17,7 @@ span.evo_c-text2speech {
 	padding : 3px;
 }
 
-.text-2speech-toggle:checked + .close.icon {
+.evo_c-text2speech--toggle:checked + .close.icon {
 	background : #ade576;
 	color : #ffffff;
 	height : 21px;
@@ -31,7 +31,7 @@ span.evo_c-text2speech {
 	z-index : 11;
 }
 
-.text-2speech-toggle:checked + .close.icon:before {
+.evo_c-text2speech--toggle:checked + .close.icon:before {
 	background-color : currentColor;
 	border : none;
 	content : '';
@@ -43,7 +43,7 @@ span.evo_c-text2speech {
 	width : 22px;
 }
 
-.text-2speech-toggle:checked + .close.icon:after {
+.evo_c-text2speech--toggle:checked + .close.icon:after {
 	background-color : currentColor;
 	border : none;
 	content : '';
@@ -56,7 +56,7 @@ span.evo_c-text2speech {
 	width : 21px;
 }
 
-.text-2speech-toggle + .close.icon {
+.evo_c-text2speech--toggle + .close.icon {
     background: #ade576;
     height: 21px;
     left: -19px;
@@ -69,8 +69,8 @@ span.evo_c-text2speech {
     z-index: 12;
 }
 
-.text-2speech-toggle + .close.icon:before,
-.text-2speech-toggle + .close.icon:after {
+.evo_c-text2speech--toggle + .close.icon:before,
+.evo_c-text2speech--toggle + .close.icon:after {
 	border-bottom : solid 9px transparent;
 	border-right : solid 10px #ffffff;
 	border-top : solid 10px transparent;
@@ -81,11 +81,11 @@ span.evo_c-text2speech {
 	width : 0;
 }
 
-.text-2speech-toggle + .close.icon:after {
+.evo_c-text2speech--toggle + .close.icon:after {
 	left : 10px;
 }
 
-.text-2speech-toggle {
+.evo_c-text2speech--toggle {
 	height : 20px;
 	/*left : -21px;*/
 	opacity : 0;
@@ -128,11 +128,11 @@ span.evo_c-text2speech {
 	position : relative;
 }
 
-.text-2speech-toggle + .evo_c-text2speech__controller-container {
+.evo_c-text2speech--toggle + .evo_c-text2speech__controller-container {
 	transform : translateX(-11rem);
 }
 
-.text-2speech-toggle:checked + .evo_c-text2speech__controller-container {
+.evo_c-text2speech--toggle:checked + .evo_c-text2speech__controller-container {
 	transform : translateX(-23.6rem);
 }
 

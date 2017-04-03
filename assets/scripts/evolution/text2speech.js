@@ -19,7 +19,7 @@ export default function() {
       this.btnStartRead = document.querySelector('.evo_c-text2speech__btn_startRead');
       this.btnStopRead = document.querySelector('.evo_c-text2speech__btn_stopRead');
       this.inpStatusRead = document.querySelector('.evo_c-text2speech__inp_statusRead');
-      this.chbxReadController = document.querySelector('.text-2speech-toggle');
+      this.chbxReadController = document.querySelector('.evo_c-text2speech--toggle');
       this.ReadControllerContainer = document.querySelector('.evo_c-text2speech__controller');
     },
 
