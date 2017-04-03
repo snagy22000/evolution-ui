@@ -8,3 +8,4 @@ dist
 .publish
 assets/**/*.map
 assets/**/*.css
+/node_modules
